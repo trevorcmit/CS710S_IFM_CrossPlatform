@@ -7,6 +7,7 @@ using BLE.Client.ViewModels;
 using MvvmCross.Forms.Views;
 using Xamarin.Forms;
 
+
 namespace BLE.Client.Pages
 {
     public partial class PageCS9010Inventory : MvxContentPage<ViewModelCS9010Inventory>
@@ -15,6 +16,7 @@ namespace BLE.Client.Pages
 		{
 			InitializeComponent();
 		}
+        
         public async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var answer = await DisplayAlert("Select Tag", "Selected Tag for Read/Write and Geiger search", "OK", "Cancel");
@@ -27,5 +29,6 @@ namespace BLE.Client.Pages
                 BleMvxApplication._SELECT_PC = 0x3000;
             }
         }
+
     }
 }

@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<views:MvxContentPage x:TypeArguments="viewModels:ViewModelMainMenu"
-                       xmlns="http://xamarin.com/schemas/2014/forms"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-                       xmlns:viewModels="clr-namespace:BLE.Client.ViewModels;assembly=BLE.Client"
-                       x:Class="BLE.Client.Pages.PageMainMenu"
-                       Title="CSL Handhelp RFID Reader">
+<views:MvxContentPage 
+    x:TypeArguments="viewModels:ViewModelMainMenu"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+    xmlns:viewModels="clr-namespace:BLE.Client.ViewModels;assembly=BLE.Client"
+    x:Class="BLE.Client.Pages.PageMainMenu"
+    Title="IFM RFID Reader"
+>
 
     <NavigationPage.TitleView>
+
+        <!-- Top Left Corner Logo and App Version Labels -->
         <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" Spacing="10">
             <Image Source="main_logo.png" HeightRequest="38"  />
-            <Label Text="C#"
-                   FontSize="Title" 
-                   TextColor="White" 
-                   HorizontalOptions="Center" 
-                   VerticalTextAlignment="Center" />
-            
-            <Label Text="{Binding labelAppVersion}"
-                   FontSize="Small" 
-                   TextColor="White" 
-                   HorizontalOptions="EndAndExpand" 
-                   VerticalTextAlignment="Center" 
-                   HorizontalTextAlignment="End"
-                   Padding="5"/>
+            <Label Text="C#" FontSize="Title" TextColor="White" HorizontalOptions="Center" VerticalTextAlignment="Center" />
+            <Label Text="{Binding labelAppVersion}" FontSize="Small" TextColor="White" HorizontalOptions="EndAndExpand"  VerticalTextAlignment="Center" HorizontalTextAlignment="End" Padding="5"/>
         </StackLayout>
+
     </NavigationPage.TitleView>
 
     <RelativeLayout>
@@ -35,7 +29,7 @@
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding OnReadWriteButtonCommand}" CommandParameter="1"/>
             </Frame.GestureRecognizers>
-            <Grid >
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="7.5*" />
                     <RowDefinition Height="2.5*" />
@@ -180,21 +174,25 @@
                 <TapGestureRecognizer Command="{Binding OnConnectButtonCommand}" CommandParameter="1"/>
             </Frame.GestureRecognizers>
 
-            <Label Text="{Binding connectedButton}" 
-                   TextColor="{Binding connectedButtonTextColor}" 
-                   FontSize="Medium" 
-                   HorizontalOptions="CenterAndExpand" 
-                   VerticalOptions="CenterAndExpand" 
-                   FontAttributes="Bold" />
+            <Label
+                Text="{Binding connectedButton}" 
+                TextColor="{Binding connectedButtonTextColor}" 
+                FontSize="Medium" 
+                HorizontalOptions="CenterAndExpand" 
+                VerticalOptions="CenterAndExpand" 
+                FontAttributes="Bold"
+            />
 
         </Frame>
 
-        <Label Text ="{Binding labelVoltage}"
-               TextColor="{Binding labelVoltageTextColor}"
-               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.0, Constant=2}"
-               RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.96, Constant=2}"
-               RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.04, Constant=-4}" 
-               RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=1.0, Constant=-4}" />
+        <Label 
+            Text ="{Binding labelVoltage}"
+            TextColor="{Binding labelVoltageTextColor}"
+            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.0, Constant=2}"
+            RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.96, Constant=2}"
+            RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.04, Constant=-4}" 
+            RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=1.0, Constant=-4}"
+        />
 
     </RelativeLayout>
 

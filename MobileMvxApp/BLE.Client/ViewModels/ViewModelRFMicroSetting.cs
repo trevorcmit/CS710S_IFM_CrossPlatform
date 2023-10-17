@@ -66,7 +66,7 @@ namespace BLE.Client.ViewModels
                     {
                         case 0: // S2
                             //ShowViewModel<ViewModelRFMicroS2Inventory>(new MvxBundle());
-                            _navigation.Navigate<ViewModelRFMicroS2Inventory>(new MvxBundle());
+                            // _navigation.Navigate<ViewModelRFMicroS2Inventory>(new MvxBundle());
                             break;
 
                         case 1: // S3

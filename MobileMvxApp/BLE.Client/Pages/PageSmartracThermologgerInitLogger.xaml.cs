@@ -8,6 +8,7 @@ using MvvmCross.Forms.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace BLE.Client.Pages
 {
 	public partial class PageSmartracThermologgerInitLogger : MvxContentPage<ViewModelSmartracThermologgerInitLogger>
@@ -26,5 +27,6 @@ namespace BLE.Client.Pages
         {
             base.OnDisappearing();
         }
+
     }
 }

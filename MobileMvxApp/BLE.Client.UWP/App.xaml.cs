@@ -1,5 +1,11 @@
 ﻿using MvvmCross.Forms.Platforms.Uap.Views;
 
+// "resx" : 1245,
+// "resy" : 784,
+// "posx" : -1602,
+// "posy" : 580,
+
+
 namespace BLE.Client.UWP
 {
     /// <summary>

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using BLE.Client.ViewModels;
 using MvvmCross.Forms.Views;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
 
 namespace BLE.Client.Pages
 {
     public partial class PageRFMicroS3Inventory : MvxContentPage<ViewModelRFMicroS3Inventory>
+    // public partial class PageRFMicroS3Inventory : BasePage
     {
 		public PageRFMicroS3Inventory()
 		{
@@ -20,5 +23,6 @@ namespace BLE.Client.Pages
                 ((ListView)sender).SelectedItem = null; // de-select the row
             };
         }
+
     }
 }

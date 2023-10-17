@@ -8,6 +8,7 @@ using MvvmCross.Forms.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace BLE.Client.Pages
 {
     public partial class PageRFMicroSetting : MvxContentPage<ViewModelRFMicroSetting>
@@ -164,10 +165,7 @@ namespace BLE.Client.Pages
         {
             string answer = await DisplayActionSheet("Threshold Comparison", "Cancel", null, _thresholdComparisonOptions);
 
-            if (answer != null && answer !="Cancel")
-            {
-                buttonThresholdComparison.Text = answer;
-            }
+            if (answer != null && answer !="Cancel") { buttonThresholdComparison.Text = answer; }
         }
 
         public async void buttonThresholdColorClicked(object sender, EventArgs e)
@@ -266,8 +264,7 @@ namespace BLE.Client.Pages
 
         bool SetSensorType(uint index)
         {
-            if (index >= _sensorTypeOptions.Length)
-                return false;
+            if (index >= _sensorTypeOptions.Length) return false;
 
             buttonSensorType.Text = _sensorTypeOptions[index];
             entryMinOCRSSI.Text = _minOCRSSIs[index].ToString();
@@ -285,5 +282,6 @@ namespace BLE.Client.Pages
 
             return true;
         }
+
     }
 }

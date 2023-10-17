@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 [assembly: Xamarin.Forms.Dependency(typeof(BLE.Client.UWP.Version_UWP))]
 namespace BLE.Client.UWP
 {
@@ -19,5 +20,6 @@ namespace BLE.Client.UWP
         {
             return version.Revision;
         }
+
     }
 }

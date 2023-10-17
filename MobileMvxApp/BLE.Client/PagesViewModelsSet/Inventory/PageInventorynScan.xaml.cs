@@ -2,6 +2,7 @@
 using MvvmCross.Forms.Presenters.Attributes;
 using MvvmCross.Forms.Views;
 
+
 namespace BLE.Client.Pages
 {
     [MvxContentPagePresentation(WrapInNavigationPage = true, NoHistory = false, Animated = true)]
@@ -19,5 +20,6 @@ namespace BLE.Client.Pages
                 CurrentPage = pages.Current;
             }
         }
+
     }
 }

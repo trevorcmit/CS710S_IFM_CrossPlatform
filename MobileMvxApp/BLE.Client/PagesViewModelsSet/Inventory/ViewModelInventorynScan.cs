@@ -4,25 +4,18 @@ using System.Collections.Generic;
 using Acr.UserDialogs;
 using System.Windows.Input;
 using Xamarin.Forms;
-
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Prism.Mvvm;
-
-//using PCLStorage;
-
 using System.Net.Http;
 using System.Net.Http.Headers;
-
 using Plugin.Share;
 using Plugin.Share.Abstractions;
 using MvvmCross.ViewModels;
 
+
 namespace BLE.Client.ViewModels
 {
-    //public class ViewModelInventorynScan : BaseViewModel
-
     public class TagInfoViewModel : BindableBase
     {
         private string _EPC;
@@ -58,9 +51,7 @@ namespace BLE.Client.ViewModels
         public string locationOfRead;
         public string eCompass;
 
-        public TagInfoViewModel()
-        {
-        }
+        public TagInfoViewModel() { }
     }
 
     public class RESTfulSDetail
@@ -179,8 +170,6 @@ namespace BLE.Client.ViewModels
 
         bool _cancelVoltageValue = false;
 
-        //bool _waitingRFIDIdle = false;
-
         // Tag Counter for Inventory Alert
         uint _tagCount4Display = 0;
         uint _tagCount4BeepSound = 0;
@@ -204,16 +193,14 @@ namespace BLE.Client.ViewModels
             OnSendDataCommand = new Command(SendDataButtonClick);
             OnShareDataCommand = new Command(ShareDataButtonClick);
 
-            //SetEvent(true);
-
             InventorySetting();
         }
 
         ~ViewModelInventorynScan()
         {
-            //BleMvxApplication._reader.barcode.Stop();
-            //_barcodeScanning = false;
-            //SetEvent(false);
+            // BleMvxApplication._reader.barcode.Stop();
+            // _barcodeScanning = false;
+            // SetEvent(false);
         }
 
         private void SetEvent(bool enable)
@@ -278,8 +265,6 @@ namespace BLE.Client.ViewModels
             if (BleMvxApplication._config.RFID_Vibration)
                 BleMvxApplication._reader.barcode.VibratorOff();
 
-            //SetEvent(false);
-
             try
             {
                 Page currentPage;
@@ -295,9 +280,8 @@ namespace BLE.Client.ViewModels
             {
             }
 
-
             // don't turn off event handler is you need program work in sleep mode.
-            //SetEvent(false);
+            // SetEvent(false);
             base.ViewDisappearing();
         }
 
@@ -421,12 +405,11 @@ namespace BLE.Client.ViewModels
                 return;
             }
 
-            StartTagCount();
             _InventoryScanning = true;
             _startInventoryButtonText = "Stop Inventory";
 
-            _ListViewRowHeight = 40 + (int)(BleMvxApplication._reader.rfid.Options.TagRanging.multibanks * 10);
-            RaisePropertyChanged(() => ListViewRowHeight);
+            // _ListViewRowHeight = 40 + (int)(BleMvxApplication._reader.rfid.Options.TagRanging.multibanks * 10);
+            // RaisePropertyChanged(() => ListViewRowHeight);
 
             InventoryStartTime = DateTime.Now;
 
@@ -449,7 +432,6 @@ namespace BLE.Client.ViewModels
 
             if (BleMvxApplication._config.RFID_Vibration)
                 BleMvxApplication._reader.barcode.VibratorOff();
-            //_waitingRFIDIdle = true;
             _InventoryScanning = false;
             _tagCount = false;
             _startInventoryButtonText = "Start Inventory";
@@ -464,7 +446,6 @@ namespace BLE.Client.ViewModels
             BleMvxApplication._reader.rfid.StopOperation();
             if (BleMvxApplication._config.RFID_Vibration)
                 BleMvxApplication._reader.barcode.VibratorOff();
-            //_waitingRFIDIdle = true;
             _InventoryScanning = false;
             _tagCount = false;
             _startInventoryButtonText = "Start Inventory";
@@ -483,85 +464,15 @@ namespace BLE.Client.ViewModels
             }
         }
 
-        void StartTagCount()
-        {
-            _tagCount = true;
-
-            _tagCount4Display = 0;
-            _tagCount4BeepSound = 0;
-            _newtagCount4BeepSound = 0;
-            //_tagCount4Vibration = 0;
-            _newtagCount4Vibration = 0;
-
-            // Create a timer that waits one second, then invokes every second.
-            Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(1000), () =>
-            {
-/*                if (BleMvxApplication._config.RFID_Vibration && !BleMvxApplication._config.RFID_VibrationTag)
-                {
-                    if (_newtagCount4Vibration > 0)
-                    {
-                        _newtagCount4Vibration = 0;
-                        _noNewTag = 0;
-                        if (!_Vibrating)
-                        {
-                            _Vibrating = true;
-                            BleMvxApplication._reader.barcode.VibratorOn(CSLibrary.BarcodeReader.VIBRATORMODE.INVENTORYON, BleMvxApplication._config.RFID_VibrationTime);
-                        }
-                    }
-                    else
-                    {
-                        if (_Vibrating)
-                        {
-                            _noNewTag++;
-
-                            if (_noNewTag > BleMvxApplication._config.RFID_VibrationWindow)
-                            { 
-                                _Vibrating = false;
-                                BleMvxApplication._reader.barcode.VibratorOff();
-                            }
-                        }
-                    }
-                }*/
-
-                _InventoryTime = (DateTime.Now - InventoryStartTime).TotalSeconds;
-                RaisePropertyChanged(() => InventoryTime);
-
-                _DebugMessage =  CSLibrary.InventoryDebug._inventoryPacketCount.ToString () + " OK, " + CSLibrary.InventoryDebug._inventorySkipPacketCount.ToString() + " Fail";
-                RaisePropertyChanged(() => DebugMessage);
-
-                _tagCount4BeepSound = 0;
-
-                //_numberOfTagsText = "  " + newTagPerSecond.ToString() + @"\" + _TagInfoList.Count.ToString() + " tags";
-                _numberOfTagsText = "     " + _TagInfoList.Count.ToString() + " tags";
-                RaisePropertyChanged(() => numberOfTagsText);
-
-                _tagPerSecondText = _readerInventoryTagRate.ToString() + "/" + _newTagPerSecond.ToString() + "/" + _tagCount4Display.ToString() + " internal/new/tags/s     ";
-                //_tagPerSecondText = _tagCount4Display.ToString() + " tags/s     ";
-                RaisePropertyChanged(() => tagPerSecondText);
-                _tagCount4Display = 0;
-                _newTagPerSecond = 0;
-
-                if (_tagCount)
-                    return true;
-
-                return false;
-            });
-        }
-
         void StopInventoryClick()
         {
             BleMvxApplication._reader.rfid.StopOperation();
             _Vibrating = false;
-            //_waitingRFIDIdle = true;
         }
 
         void TagInventoryEvent(object sender, CSLibrary.Events.OnAsyncCallbackEventArgs e)
         {
-            if (e.type != CSLibrary.Constants.CallbackType.TAG_RANGING)
-                return;
-
-            //if (_waitingRFIDIdle) // ignore display tags
-            //    return;
+            if (e.type != CSLibrary.Constants.CallbackType.TAG_RANGING) return;
 
             InvokeOnMainThread(() =>
             {
@@ -595,13 +506,12 @@ namespace BLE.Client.ViewModels
                     case CSLibrary.Constants.RFState.IDLE:
                         ClassBattery.SetBatteryMode(ClassBattery.BATTERYMODE.IDLE);
                         _cancelVoltageValue = true;
-                        //_waitingRFIDIdle = false;
 
                         if (BleMvxApplication._reader.rfid.GetModelName() == "CS710S")
                         {
                             switch (BleMvxApplication._reader.rfid.LastMacErrorCode)
                             {
-                                case 0x00:  // normal end
+                                case 0x00: // Normal End
                                     break;
 
                                 default:
@@ -613,13 +523,11 @@ namespace BLE.Client.ViewModels
                         {
                             switch (BleMvxApplication._reader.rfid.LastMacErrorCode)
                             {
-                                case 0x00:  // normal end
+                                case 0x00: // Normal End
                                     break;
-
-                                case 0x0309:    // 
+                                case 0x0309:
                                     _userDialogs.Alert("Too near to metal, please move CS108 away from metal and start inventory again.");
                                     break;
-
                                 default:
                                     _userDialogs.Alert("Mac error : 0x" + BleMvxApplication._reader.rfid.LastMacErrorCode.ToString("X4"));
                                     break;
@@ -640,25 +548,29 @@ namespace BLE.Client.ViewModels
 
         private void AddOrUpdateTagData(CSLibrary.Structures.TagCallbackInfo info)
         {
-            InvokeOnMainThread(() =>
-            {
+            // InvokeOnMainThread(() =>
+            // {
                 bool found = false;
-
                 int cnt;
 
                 lock (TagInfoList)
                 {
 
 #if not_binarysearch
+                // CSLibrary.Debug.WriteLine("if not_binarysearch");
                     for (cnt = 0; cnt < TagInfoList.Count; cnt++)
                     {
                         if (TagInfoList[cnt].EPC == info.epc.ToString())
                         {
-                            TagInfoList[cnt].Bank1Data = CSLibrary.Tools.Hex.ToString(info.Bank1Data);
-                            TagInfoList[cnt].Bank2Data = CSLibrary.Tools.Hex.ToString(info.Bank2Data);
+                        //     TagInfoList[cnt].Bank1Data = CSLibrary.Tools.Hex.ToString(info.Bank1Data);
+                        //     TagInfoList[cnt].Bank2Data = CSLibrary.Tools.Hex.ToString(info.Bank2Data);
+
+
+                            TagInfoList[cnt].Bank1Data = info.Bank1Data.Count.ToString();
+                            TagInfoList[cnt].Bank2Data = info.Bank2Data.Count.ToString();
                             TagInfoList[cnt].RSSI = info.rssi;
-                            //TagInfoList[cnt].Phase = info.phase;
-                            //TagInfoList[cnt].Channel = (byte)info.freqChannel;
+                            // TagInfoList[cnt].Phase = info.phase;
+                            // TagInfoList[cnt].Channel = (byte)info.freqChannel;
 
                             found = true;
                             break;
@@ -671,8 +583,12 @@ namespace BLE.Client.ViewModels
 
                         item.timeOfRead = DateTime.Now;
                         item.EPC = info.epc.ToString();
-                        item.Bank1Data = CSLibrary.Tools.Hex.ToString(info.Bank1Data);
-                        item.Bank2Data = CSLibrary.Tools.Hex.ToString(info.Bank2Data);
+                        // item.Bank1Data = CSLibrary.Tools.Hex.ToString(info.Bank1Data);
+                        // item.Bank2Data = CSLibrary.Tools.Hex.ToString(info.Bank2Data);
+
+                        item.Bank1Data = info.Bank1Data.Count.ToString();
+                        item.Bank2Data = info.Bank2Data.Count.ToString();
+
                         item.RSSI = info.rssi;
                         //item.Phase = info.phase;
                         //item.Channel = (byte)info.freqChannel;
@@ -688,6 +604,7 @@ namespace BLE.Client.ViewModels
                         _newTag = true;
                     }
 #else
+                // CSLibrary.Debug.WriteLine("else not_binarysearch");
                     string epcstr = info.epc.ToString();
 
                     try
@@ -758,7 +675,7 @@ namespace BLE.Client.ViewModels
                     }
 #endif
                 }
-            });
+            // });
         }
 
 		void VoltageEvent(object sender, CSLibrary.Notification.VoltageEventArgs e)

@@ -1,24 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:MvxContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-                       xmlns:viewModels="clr-namespace:BLE.Client.ViewModels;assembly=BLE.Client"
-                      x:Class="BLE.Client.Pages.PageInventory"
-                      Title="RFID Inventory">
-
+<views:MvxContentPage
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+  xmlns:viewModels="clr-namespace:BLE.Client.ViewModels;assembly=BLE.Client"
+  x:Class="BLE.Client.Pages.PageInventory"
+  Title="RFID Inventory"
+>
 
   <StackLayout>
     <ListView x:Name="liewViewTagData" ItemsSource="{Binding TagInfoList}" ItemSelected="OnItemSelected" RowHeight="{Binding ListViewRowHeight}">
 
       <ListView.Header>
-        <StackLayout Padding="10,5,0,5" BackgroundColor="#cccccc">
+        <StackLayout Padding="10,5,0,5" BackgroundColor="#CCCCCC">
           <Grid>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="0.8*" />
+              <ColumnDefinition Width="0.4*" />
+              <ColumnDefinition Width="0.2*" />
+              <ColumnDefinition Width="0.2*" />
               <ColumnDefinition Width="0.2*" />
             </Grid.ColumnDefinitions>
             <Label Text="EPC" VerticalTextAlignment="Center" FontSize="Small" />
             <Label Grid.Column="1" Text="RSSI" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontSize="Small" />
+            <Label Grid.Column="2" Text="Bank1" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontSize="Small" />
+            <Label Grid.Column="3" Text="Bank2" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontSize="Small" />
           </Grid>
         </StackLayout>
       </ListView.Header>
@@ -29,16 +34,18 @@
             <StackLayout Orientation="Vertical">
               <Grid>
                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="0.8*" />
+                  <ColumnDefinition Width="0.4*" />
+                  <ColumnDefinition Width="0.2*" />
+                  <ColumnDefinition Width="0.2*" />
                   <ColumnDefinition Width="0.2*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="{Binding EPC}" VerticalTextAlignment="Center" FontSize="Small" />
                 <Label Grid.Column="1" Text="{Binding RSSI}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" />
-              </Grid>
-              
-                <Label Text="{Binding Bank1Data}" VerticalTextAlignment="Center" FontSize="Small" />
-
-              </StackLayout>
+                <Label Grid.Column="2" Text="{Binding Bank1Data}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" />
+                <Label Grid.Column="3" Text="{Binding Bank2Data}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" />
+              </Grid>  
+              <!-- <Label Text="{Binding Bank1Data}" VerticalTextAlignment="Center" FontSize="Small" /> -->
+            </StackLayout>
           </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>

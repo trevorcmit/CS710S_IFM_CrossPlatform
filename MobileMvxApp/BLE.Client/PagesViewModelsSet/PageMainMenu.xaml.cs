@@ -1,7 +1,7 @@
-﻿
-using BLE.Client.ViewModels;
+﻿using BLE.Client.ViewModels;
 using MvvmCross.Forms.Views;
 using Xamarin.Forms;
+
 
 namespace BLE.Client.Pages
 {

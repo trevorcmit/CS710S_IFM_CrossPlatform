@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using Acr.UserDialogs;
 using MvvmCross;
 using Plugin.BLE.Abstractions.Contracts;
-
 using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
-
 using BLE.Client.Extensions;
-
 using Plugin.BLE.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Permissions.Abstractions;
@@ -17,10 +14,10 @@ using MvvmCross.ViewModels;
 using MvvmCross.Navigation;
 using BLE.Client.Pages;
 using BLE.Client.ViewModels;
-
 using static CSLibrary.RFIDDEVICE;
 using static CSLibrary.FrequencyBand;
 using Xamarin.Essentials;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -47,15 +44,15 @@ namespace BLE.Client.ViewModels
 
             Adapter.DeviceConnectionLost += OnDeviceConnectionLost;
 
-            OnReadWriteButtonCommand = new Command(OnReadWriteButtonClicked);
-            OnInventoryButtonCommand = new Command(OnInventoryButtonClicked);
-			OnRegisterTagButtonCommand = new Command(OnRegisterTagButtonClicked);
-			OnSpecialFuncButtonCommand = new Command(OnSpecialFuncButtonClicked);
-			OnGeigerButtonCommand = new Command(OnGeigerButtonClicked);
-			OnSettingButtonCommand = new Command(OnSettingButtonClicked);
-			OnSecurityButtonCommand = new Command(OnSecurityButtonClicked);
-			OnFilterButtonCommand = new Command(OnFilterButtonClicked);
-            OnConnectButtonCommand = new Command(OnConnectButtonClicked);
+            OnReadWriteButtonCommand    = new Command(OnReadWriteButtonClicked);
+            OnInventoryButtonCommand    = new Command(OnInventoryButtonClicked);
+			OnRegisterTagButtonCommand  = new Command(OnRegisterTagButtonClicked);
+			OnSpecialFuncButtonCommand  = new Command(OnSpecialFuncButtonClicked);
+			OnGeigerButtonCommand       = new Command(OnGeigerButtonClicked);
+			OnSettingButtonCommand      = new Command(OnSettingButtonClicked);
+			OnSecurityButtonCommand     = new Command(OnSecurityButtonClicked);
+			OnFilterButtonCommand       = new Command(OnFilterButtonClicked);
+            OnConnectButtonCommand      = new Command(OnConnectButtonClicked);
 
             GetPermission();
         }
@@ -65,7 +62,6 @@ namespace BLE.Client.ViewModels
             SetEvent(false);
         }
 
-        // MUST be geant location permission
         private async void GetPermission()
         {
             if (Device.RuntimePlatform == Device.Android)
@@ -73,7 +69,7 @@ namespace BLE.Client.ViewModels
                 while (await _permissions.CheckPermissionStatusAsync<Plugin.Permissions.LocationPermission>() != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
                 {
                     await _userDialogs.AlertAsync("This app collects location data in the background.  In terms of the features using this location data in the background, this App collects location data when it is reading temperature RFID tag in the “Magnus S3 with GPS for Advantech” page.  The purpose of this is to correlate the RFID tag with the actual GNSS location of the tag.  In other words, this is to track the physical location of the logistics item tagged with the RFID tag.");
-                    //                await _userDialogs.AlertAsync("This app collects location data to enable temperature RFID tag inventory with GNSS location mapped to each tag data when the app is open and in the foreground.  This location data collection is not carried out when the app is closed or not in use.   Specifically, this App collects location data when it is reading temperature RFID tag in the “Magnus S3 with GPS for Advantech” page.");
+                    // await _userDialogs.AlertAsync("This app collects location data to enable temperature RFID tag inventory with GNSS location mapped to each tag data when the app is open and in the foreground.  This location data collection is not carried out when the app is closed or not in use.   Specifically, this App collects location data when it is reading temperature RFID tag in the “Magnus S3 with GPS for Advantech” page.");
 
                     await _permissions.RequestPermissionAsync<Plugin.Permissions.LocationPermission>();
                 }

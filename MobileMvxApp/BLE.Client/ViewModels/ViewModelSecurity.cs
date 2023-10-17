@@ -2,12 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Acr.UserDialogs;
-
 using System.Windows.Input;
 using Xamarin.Forms;
-
 using Plugin.BLE.Abstractions.Contracts;
 using MvvmCross.ViewModels;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -32,7 +31,6 @@ namespace BLE.Client.ViewModels
 		public ViewModelSecurity(IAdapter adapter, IUserDialogs userDialogs) : base(adapter)
 		{
 			_userDialogs = userDialogs;
-
 			OnApplyButtonCommand = new Command(OnApplyButtonClicked);
 		}
 
@@ -136,5 +134,6 @@ namespace BLE.Client.ViewModels
 
 			RaisePropertyChanged(() => labelStatus);
 		}
+
 	}
 }

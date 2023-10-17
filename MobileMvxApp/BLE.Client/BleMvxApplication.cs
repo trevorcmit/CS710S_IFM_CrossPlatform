@@ -12,8 +12,8 @@ using PCLStorage;
 using Xamarin.Forms;
 using static CSLibrary.RFIDDEVICE;
 
-namespace BLE.Client
 
+namespace BLE.Client
 {
     using static FrequencyBand;
 
@@ -302,7 +302,6 @@ namespace BLE.Client
             RegisterAppStart<ViewModelMainMenu>();
         }
 
-        //static async public void LoadConfig(string readerID)
         static public async Task<bool> LoadConfig(string readerID, MODEL model)
         {
             try
@@ -328,9 +327,7 @@ namespace BLE.Client
                     _config = new CONFIG(model);
                 }
             }
-            catch (Exception ex)
-            {
-            }
+            catch (Exception ex) { }
             return false;
         }
 
@@ -352,5 +349,6 @@ namespace BLE.Client
             _config.readerID = readerID;
             _config.readerModel = readerModel;
         }
+
     }
 }

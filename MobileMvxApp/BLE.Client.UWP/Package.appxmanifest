@@ -4,12 +4,13 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  IgnorableNamespaces="uap mp"
+>
 
   <Identity
     Name="94efadeb-c35f-4e8b-8771-0e583097454c"
     Publisher="CN=trevo"
-    Version="1.0.2.0" />
+    Version="1.0.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="94efadeb-c35f-4e8b-8771-0e583097454c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -46,5 +47,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <DeviceCapability Name="bluetooth" />
+    <!-- <DeviceCapability Name="location"/> -->
   </Capabilities>
 </Package>

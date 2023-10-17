@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
 
 namespace BLE.Client.Pages
 {
@@ -47,13 +47,12 @@ namespace BLE.Client.Pages
 
         public async void ButtonOK_Clicked(object sender, EventArgs e)
         {
-            //BleMvxApplication._xerxes_Power = Array.IndexOf(_powerOptions, buttonPower.Text);
-            //BleMvxApplication._xerxes_Target = Array.IndexOf(_targetOptions, buttonTarget.Text);
             BleMvxApplication._xerxes_delay = int.Parse(entryDelay.Text);
 
             buttonOK.SetBinding(Button.CommandProperty, new Binding("OnOKButtonCommand"));
             buttonOK.Command.Execute(1);
             buttonOK.RemoveBinding(Button.CommandProperty);
         }
+
     }
 }

@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Acr.UserDialogs;
-
-using System.Windows.Input;
-using Xamarin.Forms;
-
-
+﻿using Acr.UserDialogs;
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Extensions;
-
 using Prism.Mvvm;
-
 using Plugin.Share;
 using Plugin.Share.Abstractions;
 using MvvmCross.ViewModels;
 using MvvmCross;
 using MvvmCross.Navigation;
+using System;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Windows.Input;
+using Xamarin.Forms;
+using Xamarin.Essentials;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -38,25 +35,13 @@ namespace BLE.Client.ViewModels
             private uint _OCRSSI;
             public uint OCRSSI { get { return this._OCRSSI; } set { this.SetProperty(ref this._OCRSSI, value); } }
 
-            private string _GOODOCRSSI;
-            public string GOODOCRSSI { get { return this._GOODOCRSSI; } set { this.SetProperty(ref this._GOODOCRSSI, value); } }
-
             public double _sensorValueSum;
             private string _sensorAvgValue;
             public string SensorAvgValue { get { return this._sensorAvgValue; } set { this.SetProperty(ref this._sensorAvgValue, value); } }
 
             private uint _sucessCount;
             public uint SucessCount { get { return this._sucessCount; } set { this.SetProperty(ref this._sucessCount, value); } }
-
-            private string _RSSIColor;
-            public string RSSIColor { get { return this._RSSIColor; } set { this.SetProperty(ref this._RSSIColor, value); } }
-
-            private string _valueColor;
-            public string valueColor { get { return this._valueColor; } set { this.SetProperty(ref this._valueColor, value); } }
-
-            public RFMicroTagInfoViewModel()
-            {
-            }
+            public RFMicroTagInfoViewModel() { }
         }
 
         private readonly IUserDialogs _userDialogs;
@@ -68,88 +53,46 @@ namespace BLE.Client.ViewModels
         public ICommand OnClearButtonCommand { protected set; get; }
         public ICommand OnShareDataCommand { protected set; get; }
         
-
         private ObservableCollection<RFMicroTagInfoViewModel> _TagInfoList = new ObservableCollection<RFMicroTagInfoViewModel>();
         public ObservableCollection<RFMicroTagInfoViewModel> TagInfoList { get { return _TagInfoList; } set { SetProperty(ref _TagInfoList, value); } }
-
-        //classRFMICROTAG[] aaa = new classRFMICROTAG();
-
-        public string SensorValueTitle
-        {
-            get
-            {
-                // 0 = Average value, 1 = RAW, 2 = Temperature F, 3 = Temperature C, 4 = Dry/Wet
-                switch (BleMvxApplication._rfMicro_SensorUnit)
-                {
-                    case 0:
-                        return "RAW";
-                    case 1:
-                        return "RAW";
-                    case 2:
-                        return "ºF";
-                    case 3:
-                        return "ºC";
-                    case 4:
-                        return "D/W";
-                }
-                return "Value";
-            }
-        }
 
         private string _startInventoryButtonText = "Start Inventory";
         public string startInventoryButtonText { get { return _startInventoryButtonText; } }
 
-        bool _tagCount = false;
-
-        private string _tagPerSecondText = "0 tags/s";
-        public string tagPerSecondText { get { return _tagPerSecondText; } }
-        private string _numberOfTagsText = "0 tags";
-        public string numberOfTagsText { get { return _numberOfTagsText; } }
         private string _labelVoltage = "";
         public string labelVoltage { get { return _labelVoltage; } }
-
-        private int _ListViewRowHeight = -1;
-        public int ListViewRowHeight { get { return _ListViewRowHeight; } set { _ListViewRowHeight = value; } }
-
         public bool _startInventory = true;
-
-        public int tagsCount = 0;
-        int _tagCountForAlert = 0;
-        bool _newTagFound = false;
-
         DateTime InventoryStartTime;
-        private double _InventoryTime = 0;
-        public string InventoryTime { get { return ((uint)_InventoryTime).ToString() + "s"; } }
 
         private string _currentPower;
         public string currentPower { get { return _currentPower; } set { _currentPower = value; } }
 
-        private int _DefaultRowHight;
-
         bool _cancelVoltageValue = false;
 
+        public FileResult pick_result;  // Save FilePicker.PickAsync() result for use in Autosave function
+        public FileResult rssi_result;  
+
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public ViewModelRFMicroS3Inventory(IAdapter adapter, IUserDialogs userDialogs, IMvxNavigationService navigation) : base(adapter)
         {
             _userDialogs = userDialogs;
             _navigation = navigation;
 
-            RaisePropertyChanged(() => ListViewRowHeight);
-            _DefaultRowHight = ListViewRowHeight;
-
             OnStartInventoryButtonCommand = new Command(StartInventoryClick);
             OnClearButtonCommand = new Command(ClearClick);
             OnShareDataCommand = new Command(ShareDataButtonClick);
 
-            RaisePropertyChanged(() => SensorValueTitle);
-
             SetPowerString();
         }
 
-        ~ViewModelRFMicroS3Inventory()
-        {
-        }
+        ~ViewModelRFMicroS3Inventory() { }
 
         public override void ViewAppearing()
         {
@@ -191,22 +134,21 @@ namespace BLE.Client.ViewModels
 
         private void ClearClick()
         {
-            InvokeOnMainThread(() =>
-            {
-                lock (TagInfoList)
-                {
-                    TagInfoList.Clear();
-                    _numberOfTagsText = _TagInfoList.Count.ToString() + " tags";
-                    RaisePropertyChanged(() => numberOfTagsText);
+            // InvokeOnMainThread(() =>
+            // {
+            //     lock (TagInfoList)
+            //     {
+            //         TagInfoList.Clear();
+            //         _numberOfTagsText = _TagInfoList.Count.ToString() + " tags";
+            //         RaisePropertyChanged(() => numberOfTagsText);
 
-                    tagsCount = 0;
-                    _tagPerSecondText = tagsCount.ToString() + " tags/s";
-                    RaisePropertyChanged(() => tagPerSecondText);
-                }
-            });
+            //         tagsCount = 0;
+            //         _tagPerSecondText = tagsCount.ToString() + " tags/s";
+            //         RaisePropertyChanged(() => tagPerSecondText);
+            //     }
+            // });
         }
 
-        //private TagInfoViewModel _ItemSelected;
         public RFMicroTagInfoViewModel objItemSelected
         {
             set
@@ -224,8 +166,14 @@ namespace BLE.Client.ViewModels
         void InventorySetting()
         {
             BleMvxApplication._reader.rfid.SetCountry(BleMvxApplication._config.RFID_Region, (int)BleMvxApplication._config.RFID_FixedChannel);
-
             BleMvxApplication._reader.rfid.Options.TagRanging.flags = CSLibrary.Constants.SelectFlags.ZERO;
+
+            // BleMvxApplication._reader.rfid.SetInventoryDuration(BleMvxApplication._config.RFID_Antenna_Dwell);
+            // BleMvxApplication._reader.rfid.SetTagDelayTime((uint)BleMvxApplication._config.RFID_CompactInventoryDelayTime); // for CS108 only
+            // BleMvxApplication._reader.rfid.SetIntraPacketDelayTime((uint)BleMvxApplication._config.RFID_IntraPacketDelayTime); // for CS710S only
+            // BleMvxApplication._reader.rfid.SetDuplicateEliminationRollingWindow(BleMvxApplication._config.RFID_DuplicateEliminationRollingWindow); // for CS710S only
+            // BleMvxApplication._reader.rfid.SetCurrentLinkProfile(BleMvxApplication._config.RFID_Profile);
+            // BleMvxApplication._reader.rfid.SetTagGroup(BleMvxApplication._config.RFID_TagGroup);
 
             // Setting 1
             SetPower(BleMvxApplication._rfMicro_Power);
@@ -348,15 +296,11 @@ namespace BLE.Client.ViewModels
 
             SetPower(BleMvxApplication._rfMicro_Power);
 
-            StartTagCount();
             //if (BleMvxApplication._config.RFID_OperationMode == CSLibrary.Constants.RadioOperationMode.CONTINUOUS)
             {
                 _startInventory = false;
                 _startInventoryButtonText = "Stop Inventory";
             }
-
-            //_ListViewRowHeight = 40 + (int)(BleMvxApplication._reader.rfid.Options.TagRanging.multibanks * 10);
-            //RaisePropertyChanged(() => ListViewRowHeight);
 
             InventoryStartTime = DateTime.Now;
             BleMvxApplication._reader.rfid.StartOperation(CSLibrary.Constants.Operation.TAG_EXERANGING);
@@ -371,17 +315,8 @@ namespace BLE.Client.ViewModels
             _startInventory = true;
             _startInventoryButtonText = "Start Inventory";
 
-            _tagCount = false;
             BleMvxApplication._reader.rfid.StopOperation();
             RaisePropertyChanged(() => startInventoryButtonText);
-
-            if (_powerRunning >= 2)
-                _powerRunning = 0;
-            else
-                _powerRunning++;
-            SetPowerString();
-
-            //BleMvxApplication._reader.rfid.CancelAllSelectCriteria();                // Confirm cancel all filter
         }
 
         void StartInventoryClick()
@@ -396,38 +331,6 @@ namespace BLE.Client.ViewModels
             }
         }
 
-        void StartTagCount()
-        {
-            tagsCount = 0;
-            _tagCount = true;
-
-            // Create a timer that waits one second, then invokes every second.
-            Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(1000), () =>
-            {
-                _InventoryTime = (DateTime.Now - InventoryStartTime).TotalSeconds;
-                RaisePropertyChanged(() => InventoryTime);
-
-                _tagCountForAlert = 0;
-
-                _numberOfTagsText = _TagInfoList.Count.ToString() + " tags";
-                RaisePropertyChanged(() => numberOfTagsText);
-
-                _tagPerSecondText = tagsCount.ToString() + " tags/s";
-                RaisePropertyChanged(() => tagPerSecondText);
-                tagsCount = 0;
-
-                if (_tagCount)
-                    return true;
-
-                return false;
-            });
-        }
-
-        void StopInventoryClick()
-        {
-            BleMvxApplication._reader.rfid.StopOperation();
-        }
-
         void TagInventoryEvent(object sender, CSLibrary.Events.OnAsyncCallbackEventArgs e)
         {
             if (e.type != CSLibrary.Constants.CallbackType.TAG_RANGING)
@@ -438,30 +341,13 @@ namespace BLE.Client.ViewModels
 
             InvokeOnMainThread(() =>
             {
-                _tagCountForAlert++;
-                if (_tagCountForAlert == 1)
-                {
-                    if (BleMvxApplication._config.RFID_InventoryAlertSound)
-                    {
-                        if (_newTagFound)
-                            Xamarin.Forms.DependencyService.Get<ISystemSound>().SystemSound(3);
-                        else
-                            Xamarin.Forms.DependencyService.Get<ISystemSound>().SystemSound(2);
-                        _newTagFound = false;
-                    }
-                }
-                else if (_tagCountForAlert >= 5)
-                    _tagCountForAlert = 0;
-
-                AddOrUpdateTagData(e.info);
-                tagsCount++;
+                // AddOrUpdateTagData(e.info);
+                updatetagdata(e.info);
             });
         }
 
         void StateChangedEvent(object sender, CSLibrary.Events.OnStateChangedEventArgs e)
         {
-            //InvokeOnMainThread(() =>
-            //{
             switch (e.state)
             {
                 case CSLibrary.Constants.RFState.IDLE:
@@ -482,7 +368,101 @@ namespace BLE.Client.ViewModels
                     }
                     break;
             }
-            //});
+        }
+
+        private async void updatetagdata(CSLibrary.Structures.TagCallbackInfo info)
+        {
+            InvokeOnMainThread(() =>
+            {
+                bool found = false;
+                int cnt;
+
+                lock (TagInfoList)
+                {
+                    UInt16 ocRSSI = info.Bank1Data[1];   // Address d
+                    UInt16 temp   = info.Bank1Data[2];   // Address e
+
+                    for (cnt=0; cnt<TagInfoList.Count; cnt++)
+                    {
+                        if (TagInfoList[cnt].EPC==info.epc.ToString())
+                        {
+                            if (ocRSSI >= BleMvxApplication._rfMicro_minOCRSSI && ocRSSI <= BleMvxApplication._rfMicro_maxOCRSSI)
+                            {
+                                // if (temp >= 1300 && temp <= 3500)
+                                // {
+                                    UInt64 caldata = (UInt64)(((UInt64)info.Bank2Data[0]<<48) |
+                                                              ((UInt64)info.Bank2Data[1]<<32) | 
+                                                              ((UInt64)info.Bank2Data[2]<<16) | 
+                                                              ((UInt64)info.Bank2Data[3]));
+
+                                    if (caldata==0) { TagInfoList[cnt].SensorAvgValue = "NoCalData"; }
+                                    else
+                                    {
+                                        string tEPC = TagInfoList[cnt].EPC.Substring(TagInfoList[cnt].EPC.Length - 4);
+                                        double SAV = Math.Round(getTempC(temp, caldata), 5);
+
+                                        // if (CORRECTION.ContainsKey(tEPC))
+                                        // {
+                                        //     SAV = SAV - CORRECTION[tEPC];
+                                        // }
+                                        string DisplaySAV = Math.Round(SAV, 2).ToString() + "°";
+
+                                        DateTime dt = DateTime.Now;
+                                        TagInfoList[cnt].SensorAvgValue = DisplaySAV;
+                                        TagInfoList[cnt].OCRSSI = ocRSSI;
+                                        TagInfoList[cnt].SucessCount++;
+
+                                    }
+                                // }
+                                // else {}
+                                // found = true;
+                                // break;
+                            }
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        RFMicroTagInfoViewModel item = new RFMicroTagInfoViewModel();
+                        item.EPC = info.epc.ToString();
+                        item.SensorAvgValue = "";
+                        // item.SucessCount = 0;
+
+                        item.SucessCount = 100;
+
+                        item.DisplayName = item.EPC;
+                        item.OCRSSI = ocRSSI;
+
+                        if (ocRSSI >= BleMvxApplication._rfMicro_minOCRSSI && ocRSSI <= BleMvxApplication._rfMicro_maxOCRSSI)
+                        {
+                            if (temp >= 1300 && temp <= 3500)
+                            {
+                                UInt64 caldata = (UInt64)(((UInt64)info.Bank2Data[0]<<48) | ((UInt64)info.Bank2Data[1]<<32) | ((UInt64)info.Bank2Data[2]<<16) | ((UInt64)info.Bank2Data[3]));
+
+                                if (caldata==0) { item.SensorAvgValue = "NoCalData"; }
+                                else
+                                {
+                                    double SAV = Math.Round(getTempC(temp, caldata), 1);   
+                                    string DisplaySAV = Math.Round(SAV, 2).ToString() + "°";
+
+                                    // item.SucessCount++;
+
+                                    item.SucessCount = 200;
+
+                                    item.SensorAvgValue = DisplaySAV;
+
+                                    List<string> t_data = new List<string>{ item.SensorAvgValue };
+                                    List<string> t_RSSI = new List<string>{ item.OCRSSI.ToString() };
+
+                                }
+                            }
+                        }
+                        TagInfoList.Insert(0, item);
+                    }
+                }
+            });
         }
 
         private void AddOrUpdateTagData(CSLibrary.Structures.TagCallbackInfo info)
@@ -492,87 +472,26 @@ namespace BLE.Client.ViewModels
                 bool found = false;
                 int cnt;
 
-                if (BleMvxApplication._rfMicro_Power == 4 && BleMvxApplication._config.RFID_PowerSequencing_NumberofPower != 0)
-                {
-                    currentPower = (BleMvxApplication._config.RFID_PowerSequencing_Level[info.antennaPort] / 10).ToString("0.0") + "dB";
-                    RaisePropertyChanged(() => currentPower);
-                }
-
                 lock (TagInfoList)
                 {
-                    UInt16 ocRSSI;
-                    UInt16 sensorCode;
-                    UInt16 temp;
-
-                    sensorCode = (UInt16)(info.Bank1Data[0] & 0x1ff); // address c
-                    ocRSSI = info.Bank1Data[1];     // address d
-                    temp = info.Bank1Data[2];       // address e
+                    UInt16 ocRSSI     = (UInt16)(info.Bank1Data[0] & 0x1ff);  // address c
+                    UInt16 sensorCode = info.Bank1Data[1];                    // address d
+                    UInt16 temp       = info.Bank1Data[2];                    // address e
 
                     for (cnt = 0; cnt < TagInfoList.Count; cnt++)
                     {
                         if (TagInfoList[cnt].EPC == info.epc.ToString())
                         {
                             TagInfoList[cnt].OCRSSI = ocRSSI;
-                            TagInfoList[cnt].RSSIColor = "Black";
 
                             if (ocRSSI >= BleMvxApplication._rfMicro_minOCRSSI && ocRSSI <= BleMvxApplication._rfMicro_maxOCRSSI)
                             {
-                                TagInfoList[cnt].GOODOCRSSI = ocRSSI.ToString();
-
-                                //BleMvxApplication._rfMicro_SensorType // 0 = Sensor code, 1 = Temp
-                                //BleMvxApplication._rfMicro_SensorUnit // 0=code, 1=f, 2=c, 3=%
+                                // BleMvxApplication._rfMicro_SensorType // 0 = Sensor code, 1 = Temp
+                                // BleMvxApplication._rfMicro_SensorUnit // 0=code, 1=f, 2=c, 3=%
 
                                 switch (BleMvxApplication._rfMicro_SensorType)
                                 {
                                     case 0:
-                                        if (BleMvxApplication._rfMicro_TagType == 1 && sensorCode >= 5 && sensorCode <= 490)
-                                        {
-                                            double SensorAvgValue;
-                                            TagInfoList[cnt].SucessCount++;
-
-                                            SensorAvgValue = sensorCode;
-
-                                            switch (BleMvxApplication._rfMicro_SensorUnit)
-                                            {
-                                                case 1: // RAW
-                                                    {
-                                                        TagInfoList[cnt].SensorAvgValue = sensorCode.ToString();
-                                                    }
-                                                    break;
-
-                                                case 4: // Range Allocation
-                                                    {
-                                                        if (sensorCode >= BleMvxApplication._rfMicro_WetDryThresholdValue)
-                                                        {
-                                                            TagInfoList[cnt].SensorAvgValue = "Dry";
-                                                        }
-                                                        else
-                                                        {
-                                                            TagInfoList[cnt].SensorAvgValue = "Wet";
-                                                        }
-                                                    }
-                                                    break;
-                                            }
-
-                                            if (TagInfoList[cnt].SucessCount >= 3)
-                                            {
-                                                switch (BleMvxApplication._rfMicro_thresholdComparison)
-                                                {
-                                                    case 0: // >
-                                                        if (SensorAvgValue > BleMvxApplication._rfMicro_thresholdValue)
-                                                            TagInfoList[cnt].valueColor = BleMvxApplication._rfMicro_thresholdColor;
-                                                        else
-                                                            TagInfoList[cnt].valueColor = "Green";
-                                                        break;
-                                                    default: // <
-                                                        if (SensorAvgValue < BleMvxApplication._rfMicro_thresholdValue)
-                                                            TagInfoList[cnt].valueColor = BleMvxApplication._rfMicro_thresholdColor;
-                                                        else
-                                                            TagInfoList[cnt].valueColor = "Green";
-                                                        break;
-                                                }
-                                            }
-                                        }
                                         break;
 
                                     default:
@@ -608,35 +527,12 @@ namespace BLE.Client.ViewModels
                                                         TagInfoList[cnt].SensorAvgValue = SensorAvgValue.ToString();
                                                         break;
                                                 }
-
-                                                if (TagInfoList[cnt].SucessCount >= 3)
-                                                {
-                                                    switch (BleMvxApplication._rfMicro_thresholdComparison)
-                                                    {
-                                                        case 0: // >
-                                                            if (SensorAvgValue > BleMvxApplication._rfMicro_thresholdValue)
-                                                                TagInfoList[cnt].valueColor = BleMvxApplication._rfMicro_thresholdColor;
-                                                            else
-                                                                TagInfoList[cnt].valueColor = "Green";
-                                                            break;
-                                                        default: // <
-                                                            if (SensorAvgValue < BleMvxApplication._rfMicro_thresholdValue)
-                                                                TagInfoList[cnt].valueColor = BleMvxApplication._rfMicro_thresholdColor;
-                                                            else
-                                                                TagInfoList[cnt].valueColor = "Green";
-                                                            break;
-                                                    }
-                                                }
                                             }
                                         }
                                         break;
                                 }
                             }
-                            else
-                            {
-                                TagInfoList[cnt].RSSIColor = "Red";
-                            }
-
+                            else {}
                             found = true;
                             break;
                         }
@@ -656,13 +552,9 @@ namespace BLE.Client.ViewModels
                         item.SucessCount = 0;
                         item._sensorValueSum = 0;
                         item.SensorAvgValue = "";
-                        item.GOODOCRSSI = "";
-                        item.RSSIColor = "Black";
-                        item.valueColor = "Black";
 
                         if (ocRSSI >= BleMvxApplication._rfMicro_minOCRSSI && ocRSSI <= BleMvxApplication._rfMicro_maxOCRSSI)
                         {
-                            item.GOODOCRSSI = ocRSSI.ToString();
 
                             //BleMvxApplication._rfMicro_SensorType // 0 = Sensor code, 1 = Temp
                             //BleMvxApplication._rfMicro_SensorUnit //0=code, 1=f, 2=c, 3=%
@@ -670,28 +562,6 @@ namespace BLE.Client.ViewModels
                             switch (BleMvxApplication._rfMicro_SensorType)
                             {
                                 case 0:
-                                    if (sensorCode >= 5 && sensorCode <= 490)
-                                    {
-                                        item.SucessCount++;
-
-                                        switch (BleMvxApplication._rfMicro_SensorUnit)
-                                        {
-                                            case 1:
-                                                item.SensorAvgValue = sensorCode.ToString();
-                                                break;
-
-                                            default:
-                                                if (sensorCode >= BleMvxApplication._rfMicro_WetDryThresholdValue)
-                                                {
-                                                    item.SensorAvgValue = "Dry";
-                                                }
-                                                else
-                                                {
-                                                    item.SensorAvgValue = "Wet";
-                                                }
-                                                break;
-                                        }
-                                    }
                                     break;
 
                                 default:
@@ -724,16 +594,15 @@ namespace BLE.Client.ViewModels
                                     break;
                             }
                         }
-                        else
-                        {
-                            item.RSSIColor = "Red";
-                        }
+                        else { }
+
+                        // _TagInfoList.Insert(0, item);
+                        // RaisePropertyChanged(() => TagInfoList);
 
                         TagInfoList.Insert(0, item);
 
-                        _newTagFound = true;
-
                         Trace.Message("EPC Data = {0}", item.EPC);
+                        // https://github.com/xamarin/Xamarin.Forms/issues/3168
                     }
                 }
             });
@@ -744,7 +613,6 @@ namespace BLE.Client.ViewModels
             for (int index = 0; index < ViewModelRFMicroNickname._TagNicknameList.Count; index++)
                 if (ViewModelRFMicroNickname._TagNicknameList[index].EPC == EPC)
                     return ViewModelRFMicroNickname._TagNicknameList[index].Nickname;
-
             return "";
         }
 
@@ -773,7 +641,6 @@ namespace BLE.Client.ViewModels
             fTemperature += (double)calTemp1;
             fTemperature -= 800;
             fTemperature /= 10;
-            //textViewTemperatureCode.setText(accessResult.substring(0, 4) + (calVer != -1 ? ("(" + String.format("%.1f", fTemperature) + (char)0x00B0 + "C" + ")") : ""));
 
             return fTemperature;
         }
@@ -782,7 +649,7 @@ namespace BLE.Client.ViewModels
 		{
             if (e.Voltage == 0xffff)
             {
-                _labelVoltage = "Battery ERROR"; //			3.98v
+                _labelVoltage = "Battery ERROR"; //	3.98v
             }
             else
             {
@@ -857,7 +724,6 @@ namespace BLE.Client.ViewModels
         }
 
         #region Key_event
-
         void HotKeys_OnKeyEvent(object sender, CSLibrary.Notification.HotKeyEventArgs e)
         {
             if (e.KeyCode == CSLibrary.Notification.Key.BUTTON)
@@ -889,5 +755,6 @@ namespace BLE.Client.ViewModels
                 await System.Threading.Tasks.Task.Delay(1000);
             }
         }
+
     }
 }

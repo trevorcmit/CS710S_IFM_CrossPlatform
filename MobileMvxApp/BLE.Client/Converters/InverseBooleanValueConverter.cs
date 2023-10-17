@@ -3,6 +3,7 @@ using System.Globalization;
 using MvvmCross.Converters;
 using Xamarin.Forms;
 
+
 namespace BLE.Client.Converters
 {
     public class InverseBooleanValueConverter : MvxValueConverter<bool, bool>, IValueConverter
@@ -16,5 +17,6 @@ namespace BLE.Client.Converters
         {
             return !value;
         }
+        
     }
 }

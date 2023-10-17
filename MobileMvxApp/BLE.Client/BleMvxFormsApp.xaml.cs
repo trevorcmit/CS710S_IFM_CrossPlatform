@@ -2,6 +2,7 @@
 using MvvmCross.Forms.Core;
 using Plugin.BLE.Abstractions;
 
+
 namespace BLE.Client
 {
     public partial class BleMvxFormsApp : MvxFormsApplication
@@ -28,5 +29,6 @@ namespace BLE.Client
             base.OnSleep();
             Trace.Message("App Sleep");
         }
+
     }
 }
