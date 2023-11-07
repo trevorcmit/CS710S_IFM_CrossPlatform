@@ -36,20 +36,9 @@ namespace BLE.Client.ViewModels
             OnNicknameButtonCommand = new Command(OnNicknameButtonClicked);
         }
 
-        public override void ViewAppearing()
-        {
-            base.ViewAppearing();
-        }
-
-        public override void ViewDisappearing()
-        {
-            base.ViewDisappearing();
-        }
-
-        protected override void InitFromBundle(IMvxBundle parameters)
-        {
-            base.InitFromBundle(parameters);
-        }
+        public override void ViewAppearing()    { base.ViewAppearing(); }
+        public override void ViewDisappearing() { base.ViewDisappearing(); }
+        protected override void InitFromBundle(IMvxBundle parameters) { base.InitFromBundle(parameters); }
 
         void OnNicknameButtonClicked(object ind)
         {
@@ -65,16 +54,17 @@ namespace BLE.Client.ViewModels
                     switch (BleMvxApplication._rfMicro_TagType)
                     {
                         case 0: // S2
-                            //ShowViewModel<ViewModelRFMicroS2Inventory>(new MvxBundle());
+                            // ShowViewModel<ViewModelRFMicroS2Inventory>(new MvxBundle());
                             // _navigation.Navigate<ViewModelRFMicroS2Inventory>(new MvxBundle());
                             break;
 
                         case 1: // S3
-                            //ShowViewModel<ViewModelRFMicroS3Inventory>(new MvxBundle());
+                            // ShowViewModel<ViewModelRFMicroS3Inventory>(new MvxBundle());
                             _navigation.Navigate<ViewModelRFMicroS3Inventory>(new MvxBundle());
                             break;
                     }
                 }
         }
+
     }
 }

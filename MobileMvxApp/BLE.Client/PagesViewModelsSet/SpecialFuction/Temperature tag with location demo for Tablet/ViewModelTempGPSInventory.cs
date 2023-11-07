@@ -1,27 +1,20 @@
-﻿using System;
+﻿using Acr.UserDialogs;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Acr.UserDialogs;
-
-
 using System.Windows.Input;
 using Xamarin.Forms;
-
-
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Extensions;
-
 using Prism.Mvvm;
-
 using Plugin.Share;
 using Plugin.Share.Abstractions;
-
 using Xamarin.Essentials;
 using MvvmCross.ViewModels;
 using MvvmCross;
 using MvvmCross.Navigation;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -381,9 +374,6 @@ namespace BLE.Client.ViewModels
                 _startInventoryButtonText = "Stop Inventory";
             }
 
-            //_ListViewRowHeight = 40 + (int)(BleMvxApplication._reader.rfid.Options.TagRanging.multibanks * 10);
-            //RaisePropertyChanged(() => ListViewRowHeight);
-
             InventoryStartTime = DateTime.Now;
             BleMvxApplication._reader.rfid.StartOperation(CSLibrary.Constants.Operation.TAG_EXERANGING);
             ClassBattery.SetBatteryMode(ClassBattery.BATTERYMODE.INVENTORY);
@@ -405,9 +395,8 @@ namespace BLE.Client.ViewModels
                 _powerRunning = 0;
             else
                 _powerRunning++;
-            SetPowerString();
 
-            //BleMvxApplication._reader.rfid.CancelAllSelectCriteria();                // Confirm cancel all filter
+            SetPowerString();
         }
 
         void StartInventoryClick()

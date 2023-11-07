@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Acr.UserDialogs;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Acr.UserDialogs;
-
 using System.Windows.Input;
 using Xamarin.Forms;
-
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Extensions;
 using MvvmCross.ViewModels;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -109,17 +107,13 @@ namespace BLE.Client.ViewModels
                                     switch ((data[0] >> 8) & 0x03)
                                     {
                                         case 0:
-                                            delay = 3;
-                                            break;
+                                            delay = 3;  break;
                                         case 1:
-                                            delay = 24;
-                                            break;
+                                            delay = 24; break;
                                         case 2:
-                                            delay = 96;
-                                            break;
+                                            delay = 96; break;
                                         default:
-                                            delay = 3;
-                                            break;
+                                            delay = 3;  break;
                                     }
                                 }
                                 break;

@@ -2,15 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Acr.UserDialogs;
-
 using System.Windows.Input;
 using Xamarin.Forms;
-
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Extensions;
 using MvvmCross.ViewModels;
+
 
 namespace BLE.Client.ViewModels
 {

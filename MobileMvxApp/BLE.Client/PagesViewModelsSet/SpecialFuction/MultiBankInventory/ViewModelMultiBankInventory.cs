@@ -3,20 +3,15 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Acr.UserDialogs;
 using MvvmCross;
-
-
 using System.Windows.Input;
 using Xamarin.Forms;
-
-
 using Plugin.BLE.Abstractions.Contracts;
-
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Extensions;
-
 using Prism.Mvvm;
 using MvvmCross.ViewModels;
 using BLE.Client.Pages;
+
 
 namespace BLE.Client.ViewModels
 {
@@ -40,7 +35,7 @@ namespace BLE.Client.ViewModels
         public bool _startInventory = true;
         private bool _KeyDown = false;
 
-        public string FilterIndicator { get { return (BleMvxApplication._PREFILTER_Enable | BleMvxApplication._POSTFILTER_MASK_Enable | BleMvxApplication._RSSIFILTER_Type != CSLibrary.Constants.RSSIFILTERTYPE.DISABLE) ? "Filter On" : ""; } }
+        // public string FilterIndicator { get { return (BleMvxApplication._PREFILTER_Enable | BleMvxApplication._POSTFILTER_MASK_Enable | BleMvxApplication._RSSIFILTER_Type != CSLibrary.Constants.RSSIFILTERTYPE.DISABLE) ? "Filter On" : ""; } }
 
         private string _startInventoryButtonText = "Start Inventory";
         public string startInventoryButtonText { get { return _startInventoryButtonText; } }

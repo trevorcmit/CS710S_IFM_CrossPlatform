@@ -278,8 +278,6 @@ namespace BLE.Client
         public static int _coldChain_LogInterval;
 
         // for Xerxes Tag
-        //public static int _xerxes_Power;
-        //public static int _xerxes_Target;
         public static int _xerxes_delay;
 
         // for Focus and Fast ID

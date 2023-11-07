@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Acr.UserDialogs;
 using Plugin.BLE.Abstractions.Contracts;
-
 using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
 using MvvmCross.ViewModels;
 using MvvmCross.Navigation;
+
 
 namespace BLE.Client.ViewModels
 {

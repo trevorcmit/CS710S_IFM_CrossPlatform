@@ -8,6 +8,7 @@ using MvvmCross.Forms.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace BLE.Client.Pages
 {
     public partial class PageSpecialFunctionsMenu : MvxContentPage<ViewModelSpecialFunctionsMenu>
@@ -16,5 +17,6 @@ namespace BLE.Client.Pages
         {
             InitializeComponent();
         }
+
     }
 }

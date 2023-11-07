@@ -19,9 +19,9 @@
 				<Button Text="Periodic Read" Font="Large" Command="{Binding OnPeriodicReadButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				<Button Text="UCODE DNA" Font="Large" Command="{Binding OnUCODEDNAButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				-->
-				<Button Text="Magnus S2 or S3 IC" Font="Large" Command="{Binding OnRFMicroButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
-				<!--
+				<Button Text="Magnus S2 or S3 IC" Font="Large" Command="{Binding OnRFMicroButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#4FDFFF" TextColor="Black" />
 				<Button Text="Axzon Xerxes" Font="Large" Command="{Binding OnXerxesButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
+				<!--
 				<Button Text="Block Write" Font="Large" Command="{Binding OnBlockWriteButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				<Button Text="Read" Font="Large" Command="{Binding OnReadButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				<Button Text="ColdChain CS8304/5" Font="Large" Command="{Binding OnCS83045ButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
@@ -36,8 +36,8 @@
 				<Button Text="EM4325 Oneshot" Font="Large" Command="{Binding OnEM4325PassiveButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				<Button Text="UCODE 8" Font="Large" Command="{Binding OnUCODE8ButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				<Button Text="Monza4 QT" Font="Large" Command="{Binding OnMonza4QTButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
-				<Button Text="Magnus S3 with GPS for Advantech" Font="Large" Command="{Binding OnMagnusS3withGPSforTabletButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 				-->
+				<Button Text="Magnus S3 with GPS for Advantech" Font="Large" Command="{Binding OnMagnusS3withGPSforTabletButtonCommand}" HorizontalOptions="FillAndExpand" BackgroundColor="#C3C3C3" TextColor="Black" />
 			</StackLayout>
 		</StackLayout>
 	</ScrollView>

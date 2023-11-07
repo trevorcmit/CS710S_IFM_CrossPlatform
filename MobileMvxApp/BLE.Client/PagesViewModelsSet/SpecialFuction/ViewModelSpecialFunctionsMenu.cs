@@ -230,19 +230,5 @@ namespace BLE.Client.ViewModels
             _navigation.Navigate<ViewModelTempGPSSetting>(new MvxBundle());
         }
 
-        /*
-        void OnASCIIdemoButtonClicked()
-        {
-            //ShowViewModel<ViewModelTempGPSSetting>(new MvxBundle());
-            _navigation.Navigate<ViewModelASCIIInventory>(new MvxBundle());
-        }
-
-        void OnAutotuneButtonClicked()
-        {
-            //ShowViewModel<ViewModelTempGPSSetting>(new MvxBundle());
-            _navigation.Navigate<ViewModelASCIIInventory>(new MvxBundle());
-        }*/
-
-
     }
 }
